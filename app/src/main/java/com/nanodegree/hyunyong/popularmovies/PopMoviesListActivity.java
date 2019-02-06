@@ -1,31 +1,53 @@
 package com.nanodegree.hyunyong.popularmovies;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class PopMoviesListActivity extends AppCompatActivity {
+import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
+import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandelr {
+
+    private List<String> mMovieList;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_movies_list);
+        setTitle(R.string.pop_movies);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mRecyclerView = findViewById(R.id.rv_pop_movie_list);
+        setupRecyclerView(mRecyclerView);
+        loadMovieData();
+    }
+
+    private void loadMovieData() {
+        new FetchMovieTask().execute();
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mMovieList = new ArrayList<>();
+        recyclerView.setAdapter(new PopMovieAdapter(mMovieList, this));
     }
 
     @Override
@@ -48,5 +70,37 @@ public class PopMoviesListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick() {
+
+    }
+
+    public class FetchMovieTask extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... voids) {
+
+            URL popularMovieRequestUrl = NetworkUtils.buildPopularMovieURL();
+            try {
+                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(popularMovieRequestUrl);
+                String[] simpleJsonMovieData = OpenMovieJsonUtils
+                        .getImageURLStringsFromJson(PopMoviesListActivity.this, jsonMovieResponse);
+
+                return simpleJsonMovieData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String[] movieData) {
+            if (movieData != null) {
+                mMovieList.addAll(Arrays.asList(movieData));
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+        }
     }
 }
