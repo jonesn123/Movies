@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandelr {
 
-    private List<String> mMovieList;
+    private List<Movie> mMovieList;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -77,18 +78,18 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
 
     }
 
-    public class FetchMovieTask extends AsyncTask<Void, Void, String[]> {
+    public class FetchMovieTask extends AsyncTask<Void, Void, List<Movie>> {
 
         @Override
-        protected String[] doInBackground(Void... voids) {
+        protected List<Movie> doInBackground(Void... voids) {
 
             URL popularMovieRequestUrl = NetworkUtils.buildPopularMovieURL();
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(popularMovieRequestUrl);
-                String[] simpleJsonMovieData = OpenMovieJsonUtils
-                        .getImageURLStringsFromJson(PopMoviesListActivity.this, jsonMovieResponse);
+                List<Movie> movies = OpenMovieJsonUtils
+                        .getImageURLStringsFromJson(jsonMovieResponse);
 
-                return simpleJsonMovieData;
+                return movies;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -96,9 +97,9 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         }
 
         @Override
-        protected void onPostExecute(String[] movieData) {
+        protected void onPostExecute(List<Movie> movieData) {
             if (movieData != null) {
-                mMovieList.addAll(Arrays.asList(movieData));
+                mMovieList.addAll(movieData);
                 mRecyclerView.getAdapter().notifyDataSetChanged();
             }
         }

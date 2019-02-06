@@ -9,20 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 
 import java.util.List;
 
 public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHolder> {
 
-    private List<String> mImageUrl;
+    private List<Movie> mImageUrl;
     private final MovieAdapterOnClickHandelr mClickHandler;
 
     public interface MovieAdapterOnClickHandelr {
         void onClick();
     }
 
-    public PopMovieAdapter(List<String> items, MovieAdapterOnClickHandelr clickHandelr) {
+    public PopMovieAdapter(List<Movie> items, MovieAdapterOnClickHandelr clickHandelr) {
         mImageUrl = items;
         mClickHandler = clickHandelr;
     }
@@ -58,10 +59,10 @@ public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull PopMovieAdapter.ViewHolder viewHolder, int position) {
-        String movieImageUrl = mImageUrl.get(position);
+        Movie movie = mImageUrl.get(position);
         ImageView imageView = viewHolder.mImageView;
         Context context = imageView.getContext();
-        String imageUrl = NetworkUtils.getImageUrl(NetworkUtils.IMAGE_SIZE_185, movieImageUrl);
+        String imageUrl = NetworkUtils.getImageUrl(NetworkUtils.IMAGE_SIZE_185, movie.getPosterPath());
         Glide.with(context).load(imageUrl).into(imageView);
     }
 
