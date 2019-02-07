@@ -16,6 +16,8 @@ import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandler {
@@ -27,7 +29,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     public static final String RELEASE_DATE = "release_data";
 
     private List<Movie> mMovieList;
-    private RecyclerView mRecyclerView;
+    private PopMovieAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mRecyclerView = findViewById(R.id.rv_pop_movie_list);
-        setupRecyclerView(mRecyclerView);
+        RecyclerView rv = findViewById(R.id.rv_pop_movie_list);
+        setupRecyclerView(rv);
         loadMovieData();
     }
 
@@ -50,7 +52,8 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mMovieList = new ArrayList<>();
-        recyclerView.setAdapter(new PopMovieAdapter(mMovieList, this));
+        mAdapter = new PopMovieAdapter(mMovieList, this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -68,7 +71,31 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_popular) {
+            Collections.sort(mMovieList, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie movie1, Movie movie2) {
+                    if (movie1.getPopularity() < movie2.getPopularity()) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            mAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.menu_rating) {
+            Collections.sort(mMovieList, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie movie1, Movie movie2) {
+                    if (movie1.getVoteAverage() < movie2.getVoteAverage()) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            mAdapter.notifyDataSetChanged();
             return true;
         }
 
@@ -108,7 +135,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         protected void onPostExecute(List<Movie> movieData) {
             if (movieData != null) {
                 mMovieList.addAll(movieData);
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
