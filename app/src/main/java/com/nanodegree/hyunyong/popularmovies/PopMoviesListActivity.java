@@ -1,17 +1,14 @@
 package com.nanodegree.hyunyong.popularmovies;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
@@ -19,10 +16,15 @@ import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandelr {
+public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandler {
+
+    public static final String ORIGINAL_TITLE = "original_title";
+    public static final String THUMBNAIL = "thumbnail";
+    public static final String OVERVIEW = "overview";
+    public static final String VOTE_AVERAGE = "vote_average";
+    public static final String RELEASE_DATE = "release_data";
 
     private List<Movie> mMovieList;
     private RecyclerView mRecyclerView;
@@ -74,8 +76,14 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     }
 
     @Override
-    public void onClick() {
-
+    public void onClick(Movie movie) {
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(ORIGINAL_TITLE, movie.getOriginalTitle());
+        intent.putExtra(THUMBNAIL, movie.getPosterPath());
+        intent.putExtra(RELEASE_DATE, movie.getDate());
+        intent.putExtra(OVERVIEW, movie.getOverview());
+        intent.putExtra(VOTE_AVERAGE, movie.getVoteAverage());
+        startActivity(intent);
     }
 
     public class FetchMovieTask extends AsyncTask<Void, Void, List<Movie>> {

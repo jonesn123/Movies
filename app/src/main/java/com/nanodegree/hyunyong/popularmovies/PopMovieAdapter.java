@@ -17,15 +17,15 @@ import java.util.List;
 public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHolder> {
 
     private List<Movie> mImageUrl;
-    private final MovieAdapterOnClickHandelr mClickHandler;
+    private final MovieAdapterOnClickHandler mClickHandler;
 
-    public interface MovieAdapterOnClickHandelr {
-        void onClick();
+    public interface MovieAdapterOnClickHandler {
+        void onClick(Movie movie);
     }
 
-    public PopMovieAdapter(List<Movie> items, MovieAdapterOnClickHandelr clickHandelr) {
+    public PopMovieAdapter(List<Movie> items, MovieAdapterOnClickHandler clickHandler) {
         mImageUrl = items;
-        mClickHandler = clickHandelr;
+        mClickHandler = clickHandler;
     }
 
 
@@ -42,7 +42,7 @@ public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHo
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            mClickHandler.onClick();
+            mClickHandler.onClick(mImageUrl.get(adapterPosition));
         }
     }
 

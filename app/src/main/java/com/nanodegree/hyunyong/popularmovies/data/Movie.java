@@ -28,6 +28,8 @@ public class Movie {
         this.title = title;
         this.popularity = popularity;
         this.poster_path = poster_path;
+        this.original_language = original_language;
+        this.original_title = original_title;
         this.backdrop_path = backdrop_path;
         this.adult = adult;
         this.overview = overview;
@@ -38,103 +40,51 @@ public class Movie {
         return original_title;
     }
 
-    public void setOriginalTitle(String original_title) {
-        this.original_title = original_title;
-    }
-
     public String getOriginalLanguage() {
         return original_language;
-    }
-
-    public void setOriginalLanguage(String original_language) {
-        this.original_language = original_language;
     }
 
     public int getVoteCount() {
         return vote_count;
     }
 
-    public void setVoteCount(int vote_count) {
-        this.vote_count = vote_count;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public boolean isVideo() {
         return video;
     }
 
-    public void setVideo(boolean video) {
-        this.video = video;
-    }
-
     public double getVoteAverage() {
         return vote_average;
-    }
-
-    public void setVoteAverage(double vote_average) {
-        this.vote_average = vote_average;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public double getPopularity() {
         return popularity;
-    }
-
-    public void setPopularity(double popularity) {
-        this.popularity = popularity;
     }
 
     public String getPosterPath() {
         return poster_path;
     }
 
-    public void setPosterPath(String poster_path) {
-        this.poster_path = poster_path;
-    }
-
     public String getBackdropPath() {
         return backdrop_path;
-    }
-
-    public void setBackdropPath(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
     }
 
     public boolean isAdult() {
         return adult;
     }
 
-    public void setAdult(boolean adult) {
-        this.adult = adult;
-    }
-
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 }
