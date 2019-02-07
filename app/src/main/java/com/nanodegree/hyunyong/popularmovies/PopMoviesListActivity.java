@@ -37,7 +37,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         setContentView(R.layout.activity_pop_movies_list);
         setTitle(R.string.pop_movies);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         RecyclerView rv = findViewById(R.id.rv_pop_movie_list);
@@ -113,7 +113,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         startActivity(intent);
     }
 
-    public class FetchMovieTask extends AsyncTask<Void, Void, List<Movie>> {
+    private class FetchMovieTask extends AsyncTask<Void, Void, List<Movie>> {
 
         @Override
         protected List<Movie> doInBackground(Void... voids) {
@@ -121,10 +121,9 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
             URL popularMovieRequestUrl = NetworkUtils.buildPopularMovieURL();
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(popularMovieRequestUrl);
-                List<Movie> movies = OpenMovieJsonUtils
-                        .getImageURLStringsFromJson(jsonMovieResponse);
 
-                return movies;
+                return OpenMovieJsonUtils
+                        .getImageURLStringsFromJson(jsonMovieResponse);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

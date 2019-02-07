@@ -1,7 +1,6 @@
 package com.nanodegree.hyunyong.popularmovies.data;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +29,11 @@ public class NetworkUtils {
     private static final String API_VALUE = "a0fd9d88f749bbc10d42589347a80e7a";
 
     // api path for movie restful api
-    final static String POP = "popular";
-    final static String REVIEWS = "reviews";
+    private final static String POP = "popular";
+    private final static String REVIEWS = "reviews";
 
     // query paraams
-    final static String API_KEY = "api_key";
+    private final static String API_KEY = "api_key";
 
     // http://api.themoviedb.org/3/movie/popular?api_key=a0fd9d88f749bbc10d42589347a80e7a
     public static URL buildPopularMovieURL() {

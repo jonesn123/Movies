@@ -1,7 +1,5 @@
 package com.nanodegree.hyunyong.popularmovies.utilities;
 
-import android.content.Context;
-
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
 
 import org.json.JSONArray;

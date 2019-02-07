@@ -31,11 +31,11 @@ public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final ImageView mImageView;
+        private final ImageView mImageView;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.image_movie);
+            mImageView = itemView.findViewById(R.id.image_movie);
             itemView.setOnClickListener(this);
         }
 
