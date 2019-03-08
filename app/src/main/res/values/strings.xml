@@ -7,4 +7,7 @@
     <string name="release_date">Release Date</string>
     <string name="ratings">Ratings</string>
     <string name="movie_poster">Movie Poster</string>
+    <string name="make_as_favorite">MAKE AS FAVORITE</string>
+    <string name="favorite_movie">Favorite Movie</string>
+    <string name="show_review">Show Review</string>
 </resources>

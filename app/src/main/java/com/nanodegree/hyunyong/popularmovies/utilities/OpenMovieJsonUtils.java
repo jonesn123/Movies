@@ -1,6 +1,7 @@
 package com.nanodegree.hyunyong.popularmovies.utilities;
 
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
+import com.nanodegree.hyunyong.popularmovies.data.Video;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +15,44 @@ import java.util.List;
  * Utility functions to handle Movie JSON data.
  */
 public final class OpenMovieJsonUtils {
+
+    public static List<Video> getVideoURLStringsFromJson(String jsonStr)
+            throws JSONException {
+        final String ID = "id";
+        final String RESULTS = "results";
+        final String ISO_639_1 = "iso_639_1";
+        final String ISO_3166_1 = "iso_3166_1";
+        final String KEY = "key";
+        final String NAME = "name";
+        final String SITE = "site";
+        final String SIZE = "size";
+        final String TYPE = "type";
+
+        List<Video> videos = new ArrayList<>();
+
+        JSONObject videoJson = new JSONObject(jsonStr);
+        /* Is there an error? */
+        JSONArray movieArray = videoJson.getJSONArray(RESULTS);
+        for (int i = 0; i < movieArray.length(); i++) {
+            JSONObject jsonVideo = movieArray.getJSONObject(i);
+            String id = jsonVideo.getString(ID);
+            String iso_639_1 = jsonVideo.getString(ISO_639_1);
+            String iso_3166_1 = jsonVideo.getString(ISO_3166_1);
+            String key = jsonVideo.getString(KEY);
+            String name = jsonVideo.getString(NAME);
+            String site = jsonVideo.getString(SITE);
+            int size = jsonVideo.getInt(SIZE);
+            String type = jsonVideo.getString(TYPE);
+
+            Video video = new Video(id, iso_639_1, iso_3166_1, key, name, site, size, type);
+
+            videos.add(video);
+
+        }
+
+        return videos;
+
+    }
 
     public static List<Movie> getImageURLStringsFromJson(String jsonStr)
             throws JSONException {
@@ -53,7 +92,7 @@ public final class OpenMovieJsonUtils {
             }
         }
         JSONArray movieArray = movieJson.getJSONArray(MOV_RESULT);
-        for (int i = 0 ; i < movieArray.length(); i++) {
+        for (int i = 0; i < movieArray.length(); i++) {
             JSONObject jsonMovie = movieArray.getJSONObject(i);
             int vote_count = jsonMovie.getInt(VOTE_COUNT);
             int id = jsonMovie.getInt(ID);

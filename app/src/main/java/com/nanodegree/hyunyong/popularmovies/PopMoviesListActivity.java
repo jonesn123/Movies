@@ -22,6 +22,7 @@ import java.util.List;
 
 public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandler {
 
+    public static final String MOVIE_ID = "movie_id";
     public static final String ORIGINAL_TITLE = "original_title";
     public static final String THUMBNAIL = "thumbnail";
     public static final String OVERVIEW = "overview";
@@ -105,6 +106,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MOVIE_ID, movie.getId());
         intent.putExtra(ORIGINAL_TITLE, movie.getOriginalTitle());
         intent.putExtra(THUMBNAIL, movie.getPosterPath());
         intent.putExtra(RELEASE_DATE, movie.getDate());
