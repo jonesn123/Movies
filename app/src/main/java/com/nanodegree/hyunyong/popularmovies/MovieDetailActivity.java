@@ -2,6 +2,7 @@ package com.nanodegree.hyunyong.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -90,13 +91,14 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             View view = inflater.inflate(R.layout.layout_movie_list, parent, false);
-            Video item = getItem(position);
+            final Video item = getItem(position);
+            if (item == null) return view;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // You tube 재생
+                    startActivity(new Intent(Intent.ACTION_VIEW, item.getYouTubeUri()));
                 }
             });
 

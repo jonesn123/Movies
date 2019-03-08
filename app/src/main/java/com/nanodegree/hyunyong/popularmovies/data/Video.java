@@ -1,5 +1,7 @@
 package com.nanodegree.hyunyong.popularmovies.data;
 
+import android.net.Uri;
+
 /**
  * "id": "5a37e67d0e0a264cd01ede50",
  *             "iso_639_1": "en",
@@ -38,4 +40,9 @@ public class Video {
     private String site;
     private int size;
     private String type;
+
+    static final String YOUTUBE_URI = "http://www.youtube.com/watch?v=";
+    public Uri getYouTubeUri() {
+        return Uri.parse(YOUTUBE_URI + this.key);
+    }
 }
