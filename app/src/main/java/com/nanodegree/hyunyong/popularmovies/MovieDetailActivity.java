@@ -2,7 +2,6 @@ package com.nanodegree.hyunyong.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -78,6 +78,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView tvOverview = view.findViewById(R.id.overview);
         tvOverview.setText(overview);
 
+        Button review = view.findViewById(R.id.show_review);
+        review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MovieDetailActivity.this, MovieReviewActivity.class);
+                intent.putExtra(PopMoviesListActivity.MOVIE_ID, mMovieId);
+                startActivity(intent);
+            }
+        });
+
         mMovieList.addHeaderView(view);
     }
 
@@ -113,7 +123,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         @Override
         protected List<Video> doInBackground(Void... movieId) {
 
-            URL videoRequestURL = NetworkUtils.buildViDeoMovieURL(mMovieId);
+            URL videoRequestURL = NetworkUtils.buildVideoMovieURL(mMovieId);
             try {
                 String jsonVideoResponse = NetworkUtils.getResponseFromHttpUrl(videoRequestURL);
 

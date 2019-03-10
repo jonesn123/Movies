@@ -52,7 +52,7 @@ public class NetworkUtils {
     }
 
     // http://api.themoviedb.org/3/movie/450465/reviews?api_key=a0fd9d88f749bbc10d42589347a80e7a
-    public static URL buildReviewsMovieURL(String movieID) {
+    public static URL buildReviewsMovieURL(int movieID) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL + movieID + "/" + REVIEWS).buildUpon()
                 .appendQueryParameter(API_KEY, API_VALUE).build();
         URL url = null;
@@ -67,7 +67,7 @@ public class NetworkUtils {
 
 
     // http://api.themoviedb.org/3/movie/399579/videos?api_key=a0fd9d88f749bbc10d42589347a80e7a
-    public static URL buildViDeoMovieURL(int movieID) {
+    public static URL buildVideoMovieURL(int movieID) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL + movieID + "/" + VIDEOS).buildUpon()
                 .appendQueryParameter(API_KEY, API_VALUE).build();
         URL url = null;

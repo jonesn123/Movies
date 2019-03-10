@@ -4,6 +4,7 @@
     <string name="highest_rated">Highest Rated</string>
     <string name="pop_movies">Pop Movies</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="title_avtitity_movie_review">Review</string>
     <string name="release_date">Release Date</string>
     <string name="ratings">Ratings</string>
     <string name="movie_poster">Movie Poster</string>

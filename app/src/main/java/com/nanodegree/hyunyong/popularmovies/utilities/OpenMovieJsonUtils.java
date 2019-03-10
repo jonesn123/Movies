@@ -1,6 +1,7 @@
 package com.nanodegree.hyunyong.popularmovies.utilities;
 
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
+import com.nanodegree.hyunyong.popularmovies.data.Review;
 import com.nanodegree.hyunyong.popularmovies.data.Video;
 
 import org.json.JSONArray;
@@ -117,5 +118,35 @@ public final class OpenMovieJsonUtils {
         }
 
         return movies;
+    }
+
+    public static List<Review> getReviewFromJson(String jsonStr)
+            throws JSONException {
+
+        final String RESULT = "results";
+
+        final String AUTHOR = "author";
+        final String CONTENT = "content";
+        final String ID = "id";
+        final String URL = "url";
+
+        List<Review> reviews = new ArrayList<>();
+
+        JSONObject reviewJson = new JSONObject(jsonStr);
+
+        JSONArray reviewArray = reviewJson.getJSONArray(RESULT);
+        for (int i = 0; i < reviewArray.length(); i++) {
+            JSONObject jsonReview = reviewArray.getJSONObject(i);
+            String author = jsonReview.getString(AUTHOR);
+            String content = jsonReview.getString(CONTENT);
+            String id = jsonReview.getString(ID);
+            String url = jsonReview.getString(URL);
+            Review review = new Review(author, content, id, url);
+
+            reviews.add(review);
+
+        }
+
+        return reviews;
     }
 }

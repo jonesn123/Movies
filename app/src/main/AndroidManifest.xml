@@ -25,6 +25,10 @@
             android:name=".MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MovieReviewActivity"
+            android:label="@string/title_avtitity_movie_review" />
+
     </application>
 
 </manifest>
