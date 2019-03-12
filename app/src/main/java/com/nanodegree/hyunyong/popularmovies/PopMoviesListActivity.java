@@ -89,7 +89,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
             Collections.sort(mMovieList, new Comparator<Movie>() {
                 @Override
                 public int compare(Movie movie1, Movie movie2) {
-                    if (movie1.getVoteAverage() < movie2.getVoteAverage()) {
+                    if (movie1.getVote_average() < movie2.getVote_average()) {
                         return 1;
                     } else {
                         return -1;
@@ -107,11 +107,11 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra(MOVIE_ID, movie.getId());
-        intent.putExtra(ORIGINAL_TITLE, movie.getOriginalTitle());
-        intent.putExtra(THUMBNAIL, movie.getPosterPath());
+        intent.putExtra(ORIGINAL_TITLE, movie.getOriginal_title());
+        intent.putExtra(THUMBNAIL, movie.getPoster_path());
         intent.putExtra(RELEASE_DATE, movie.getDate());
         intent.putExtra(OVERVIEW, movie.getOverview());
-        intent.putExtra(VOTE_AVERAGE, movie.getVoteAverage());
+        intent.putExtra(VOTE_AVERAGE, movie.getVote_average());
         startActivity(intent);
     }
 

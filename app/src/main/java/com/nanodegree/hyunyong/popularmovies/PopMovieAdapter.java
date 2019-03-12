@@ -62,7 +62,7 @@ public class PopMovieAdapter extends RecyclerView.Adapter<PopMovieAdapter.ViewHo
         Movie movie = mImageUrl.get(position);
         ImageView imageView = viewHolder.mImageView;
         Context context = imageView.getContext();
-        String imageUrl = NetworkUtils.getImageUrl(NetworkUtils.IMAGE_SIZE_185, movie.getPosterPath());
+        String imageUrl = NetworkUtils.getImageUrl(NetworkUtils.IMAGE_SIZE_185, movie.getPoster_path());
         Glide.with(context).load(imageUrl).into(imageView);
     }
 
