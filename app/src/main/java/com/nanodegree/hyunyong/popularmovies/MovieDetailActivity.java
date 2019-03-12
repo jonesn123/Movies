@@ -12,13 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.data.Video;
+import com.nanodegree.hyunyong.popularmovies.db.AppDataBase;
+import com.nanodegree.hyunyong.popularmovies.db.dao.FavoriteMovieDao;
+import com.nanodegree.hyunyong.popularmovies.db.entity.FavoriteMovie;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 
 import java.net.URL;
@@ -51,10 +57,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         mMovieAdapter = new VideoListAdapter(this, mVedioList);
         mMovieList.setAdapter(mMovieAdapter);
 
-        loadVedioData();
+        loadVideoData();
     }
 
-    private void loadVedioData() {
+    private void loadVideoData() {
         new FetchVideoTask().execute();
     }
 
@@ -77,6 +83,28 @@ public class MovieDetailActivity extends AppCompatActivity {
         String overview =  intent.getStringExtra(PopMoviesListActivity.OVERVIEW);
         TextView tvOverview = view.findViewById(R.id.overview);
         tvOverview.setText(overview);
+
+        CheckBox favorite = view.findViewById(R.id.favorite_btn);
+        AppDataBase dataBase = AppDataBase.getDatabase(MovieDetailActivity.this);
+        final FavoriteMovieDao dao = dataBase.favoriteMovieDao();
+        if(dao.getFavoriteMovie(mMovieId) != null) {
+            favorite.setChecked(true);
+        } else {
+            favorite.setChecked(false);
+        }
+        favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    dao.insert(new FavoriteMovie(mMovieId));
+                    Toast.makeText(MovieDetailActivity.this, getString(R.string.add_favorite_movie), Toast.LENGTH_SHORT).show();
+                } else {
+                    dao.delete(new FavoriteMovie(mMovieId));
+                    Toast.makeText(MovieDetailActivity.this, getString(R.string.remove_favorite_movie), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         Button review = view.findViewById(R.id.show_review);
         review.setOnClickListener(new View.OnClickListener() {

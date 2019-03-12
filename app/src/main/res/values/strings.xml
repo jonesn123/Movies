@@ -11,4 +11,6 @@
     <string name="make_as_favorite">MAKE AS FAVORITE</string>
     <string name="favorite_movie">Favorite Movie</string>
     <string name="show_review">Show Review</string>
+    <string name="add_favorite_movie">add favorite movie</string>
+    <string name="remove_favorite_movie">remove favorite movie</string>
 </resources>

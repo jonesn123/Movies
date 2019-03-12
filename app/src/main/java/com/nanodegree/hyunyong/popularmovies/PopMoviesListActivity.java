@@ -12,12 +12,13 @@ import android.view.MenuItem;
 
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
+import com.nanodegree.hyunyong.popularmovies.db.AppDataBase;
+import com.nanodegree.hyunyong.popularmovies.db.dao.MovieDao;
+import com.nanodegree.hyunyong.popularmovies.db.entity.FavoriteMovie;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class PopMoviesListActivity extends AppCompatActivity implements PopMovieAdapter.MovieAdapterOnClickHandler {
@@ -71,35 +72,22 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        mMovieList.clear();
+        MovieDao movieDao = AppDataBase.getDatabase(this).movieDao();
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_popular) {
-            Collections.sort(mMovieList, new Comparator<Movie>() {
-                @Override
-                public int compare(Movie movie1, Movie movie2) {
-                    if (movie1.getPopularity() < movie2.getPopularity()) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-            mAdapter.notifyDataSetChanged();
-            return true;
+            mMovieList.addAll(movieDao.getMoviesOrderByPopularity());
         } else if (id == R.id.menu_rating) {
-            Collections.sort(mMovieList, new Comparator<Movie>() {
-                @Override
-                public int compare(Movie movie1, Movie movie2) {
-                    if (movie1.getVote_average() < movie2.getVote_average()) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-            mAdapter.notifyDataSetChanged();
-            return true;
+            mMovieList.addAll(movieDao.getMoviesOrderByRating());
+        } else if (id == R.id.menu_favority) {
+            List<FavoriteMovie> favoriteMovies = AppDataBase.getDatabase(this).favoriteMovieDao().getFavoriteMovies();
+            for (FavoriteMovie favoriteMovie: favoriteMovies) {
+                Movie movie = movieDao.getMovie(favoriteMovie.getId());
+                mMovieList.add(movie);
+            }
         }
 
+        mAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 
@@ -135,6 +123,8 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         @Override
         protected void onPostExecute(List<Movie> movieData) {
             if (movieData != null) {
+                AppDataBase dataBase = AppDataBase.getDatabase(PopMoviesListActivity.this);
+                dataBase.movieDao().insertAll(movieData);
                 mMovieList.addAll(movieData);
                 mAdapter.notifyDataSetChanged();
             }
