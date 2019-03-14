@@ -1,4 +1,4 @@
-package com.nanodegree.hyunyong.popularmovies;
+package com.nanodegree.hyunyong.popularmovies.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.nanodegree.hyunyong.popularmovies.R;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.data.Video;
 import com.nanodegree.hyunyong.popularmovies.db.AppDataBase;

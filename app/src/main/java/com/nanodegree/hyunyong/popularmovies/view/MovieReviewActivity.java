@@ -1,4 +1,4 @@
-package com.nanodegree.hyunyong.popularmovies;
+package com.nanodegree.hyunyong.popularmovies.view;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.nanodegree.hyunyong.popularmovies.R;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.data.Review;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;

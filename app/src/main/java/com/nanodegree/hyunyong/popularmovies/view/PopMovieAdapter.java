@@ -1,4 +1,4 @@
-package com.nanodegree.hyunyong.popularmovies;
+package com.nanodegree.hyunyong.popularmovies.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.nanodegree.hyunyong.popularmovies.R;
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 

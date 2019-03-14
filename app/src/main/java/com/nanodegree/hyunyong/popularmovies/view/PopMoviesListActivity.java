@@ -1,8 +1,11 @@
-package com.nanodegree.hyunyong.popularmovies;
+package com.nanodegree.hyunyong.popularmovies.view;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nanodegree.hyunyong.popularmovies.R;
 import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.db.AppDataBase;
 import com.nanodegree.hyunyong.popularmovies.db.dao.MovieDao;
 import com.nanodegree.hyunyong.popularmovies.db.entity.FavoriteMovie;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
+import com.nanodegree.hyunyong.popularmovies.viewModel.MovieModel;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
 
     private List<Movie> mMovieList;
     private PopMovieAdapter mAdapter;
+    private MovieModel mMovieModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,23 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
 
         RecyclerView rv = findViewById(R.id.rv_pop_movie_list);
         setupRecyclerView(rv);
+        mMovieModel = ViewModelProviders.of(this).get(MovieModel.class);
+        mMovieModel.favoriteMovieLiveData.observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                if (movies != null) {
+                    mMovieList.clear();
+                    mMovieList.addAll(movies);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         loadMovieData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void loadMovieData() {
@@ -72,22 +94,20 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        mMovieList.clear();
         MovieDao movieDao = AppDataBase.getDatabase(this).movieDao();
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_popular) {
+            mMovieList.clear();
             mMovieList.addAll(movieDao.getMoviesOrderByPopularity());
+            mAdapter.notifyDataSetChanged();
         } else if (id == R.id.menu_rating) {
+            mMovieList.clear();
             mMovieList.addAll(movieDao.getMoviesOrderByRating());
+            mAdapter.notifyDataSetChanged();
         } else if (id == R.id.menu_favority) {
-            List<FavoriteMovie> favoriteMovies = AppDataBase.getDatabase(this).favoriteMovieDao().getFavoriteMovies();
-            for (FavoriteMovie favoriteMovie: favoriteMovies) {
-                Movie movie = movieDao.getMovie(favoriteMovie.getId());
-                mMovieList.add(movie);
-            }
+            mMovieModel.findFavoriteMovies(this);
         }
 
-        mAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 

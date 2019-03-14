@@ -1,4 +1,4 @@
-package com.nanodegree.hyunyong.popularmovies;
+package com.nanodegree.hyunyong.popularmovies.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nanodegree.hyunyong.popularmovies.R;
 import com.nanodegree.hyunyong.popularmovies.data.Review;
 
 import java.util.List;
