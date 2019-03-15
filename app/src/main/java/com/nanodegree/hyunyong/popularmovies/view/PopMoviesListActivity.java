@@ -54,7 +54,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_movies_list);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(INTENT_FILTER_FAVORITE_CHANGE));
-        setTitle(R.string.pop_movies);
+        setTitle(R.string.movies);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,9 +107,8 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         int id = item.getItemId();
 
         MovieDao movieDao = AppDataBase.getDatabase(this).movieDao();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.menu_popular) {
-            setTitle(R.string.pop_movies);
+            setTitle(R.string.popular_movies);
             mMovieList.clear();
             mMovieList.addAll(movieDao.getMoviesOrderByPopularity());
             mAdapter.notifyDataSetChanged();

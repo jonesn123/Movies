@@ -12,10 +12,10 @@ import java.util.List;
 
 @Dao
 public interface MovieDao {
-    @Query("SELECT * FROM movies ORDER BY popularity")
+    @Query("SELECT * FROM movies ORDER BY popularity DESC")
     List<Movie> getMoviesOrderByPopularity();
 
-    @Query("SELECT * FROM movies ORDER BY vote_average")
+    @Query("SELECT * FROM movies ORDER BY vote_average DESC")
     List<Movie> getMoviesOrderByRating();
 
     @Query("SELECT * FROM movies WHERE `id` = :id")
