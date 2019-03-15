@@ -13,4 +13,6 @@
     <string name="show_review">Show Review</string>
     <string name="add_favorite_movie">add favorite movie</string>
     <string name="remove_favorite_movie">remove favorite movie</string>
+    <string name="favorite_movies">Favorite Movies</string>
+    <string name="high_rating_movies">High Rating Movies</string>
 </resources>

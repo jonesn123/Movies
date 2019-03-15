@@ -2,10 +2,14 @@ package com.nanodegree.hyunyong.popularmovies.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +22,6 @@ import com.nanodegree.hyunyong.popularmovies.data.Movie;
 import com.nanodegree.hyunyong.popularmovies.data.NetworkUtils;
 import com.nanodegree.hyunyong.popularmovies.db.AppDataBase;
 import com.nanodegree.hyunyong.popularmovies.db.dao.MovieDao;
-import com.nanodegree.hyunyong.popularmovies.db.entity.FavoriteMovie;
 import com.nanodegree.hyunyong.popularmovies.utilities.OpenMovieJsonUtils;
 import com.nanodegree.hyunyong.popularmovies.viewModel.MovieModel;
 
@@ -34,15 +37,23 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
     public static final String OVERVIEW = "overview";
     public static final String VOTE_AVERAGE = "vote_average";
     public static final String RELEASE_DATE = "release_data";
+    public static final String INTENT_FILTER_FAVORITE_CHANGE = "favorite_change";
 
     private List<Movie> mMovieList;
     private PopMovieAdapter mAdapter;
     private MovieModel mMovieModel;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mMovieModel.findFavoriteMovies(context);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_movies_list);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(INTENT_FILTER_FAVORITE_CHANGE));
         setTitle(R.string.pop_movies);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -55,6 +66,7 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 if (movies != null) {
+                    setTitle(R.string.favorite_movies);
                     mMovieList.clear();
                     mMovieList.addAll(movies);
                     mAdapter.notifyDataSetChanged();
@@ -97,14 +109,17 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
         MovieDao movieDao = AppDataBase.getDatabase(this).movieDao();
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_popular) {
+            setTitle(R.string.pop_movies);
             mMovieList.clear();
             mMovieList.addAll(movieDao.getMoviesOrderByPopularity());
             mAdapter.notifyDataSetChanged();
         } else if (id == R.id.menu_rating) {
+            setTitle(R.string.high_rating_movies);
             mMovieList.clear();
             mMovieList.addAll(movieDao.getMoviesOrderByRating());
             mAdapter.notifyDataSetChanged();
         } else if (id == R.id.menu_favority) {
+            setTitle(getString(R.string.favorite_movies));
             mMovieModel.findFavoriteMovies(this);
         }
 
@@ -149,5 +164,11 @@ public class PopMoviesListActivity extends AppCompatActivity implements PopMovie
                 mAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 }

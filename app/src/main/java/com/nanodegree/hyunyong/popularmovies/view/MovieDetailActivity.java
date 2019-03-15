@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -81,14 +82,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView tvRating = view.findViewById(R.id.rating);
         tvRating.setText(String.format(Locale.ENGLISH, "%.1f / 10.0", rating));
 
-        String overview =  intent.getStringExtra(PopMoviesListActivity.OVERVIEW);
+        String overview = intent.getStringExtra(PopMoviesListActivity.OVERVIEW);
         TextView tvOverview = view.findViewById(R.id.overview);
         tvOverview.setText(overview);
 
         CheckBox favorite = view.findViewById(R.id.favorite_btn);
         AppDataBase dataBase = AppDataBase.getDatabase(MovieDetailActivity.this);
         final FavoriteMovieDao dao = dataBase.favoriteMovieDao();
-        if(dao.getFavoriteMovie(mMovieId) != null) {
+        if (dao.getFavoriteMovie(mMovieId) != null) {
             favorite.setChecked(true);
         } else {
             favorite.setChecked(false);
@@ -96,13 +97,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     dao.insert(new FavoriteMovie(mMovieId));
                     Toast.makeText(MovieDetailActivity.this, getString(R.string.add_favorite_movie), Toast.LENGTH_SHORT).show();
                 } else {
                     dao.delete(new FavoriteMovie(mMovieId));
                     Toast.makeText(MovieDetailActivity.this, getString(R.string.remove_favorite_movie), Toast.LENGTH_SHORT).show();
                 }
+                LocalBroadcastManager.getInstance(MovieDetailActivity.this).sendBroadcast(new Intent(PopMoviesListActivity.INTENT_FILTER_FAVORITE_CHANGE));
             }
         });
 
@@ -123,9 +125,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private class VideoListAdapter extends ArrayAdapter<Video> {
 
         private LayoutInflater inflater;
+
         public VideoListAdapter(Context context, ArrayList<Video> array) {
-            super(context,0, array);
-            inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            super(context, 0, array);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @NonNull
